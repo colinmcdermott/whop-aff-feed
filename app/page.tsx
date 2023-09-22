@@ -5,10 +5,4 @@ export default async function Home() {
   const user = await WhopAPI.user({ headers }).GET("/me", {});
 
   const username = user.data?.username;
-
-  return (
-    <div>
-      Username: {username}
-    </div>
-  );
 }
