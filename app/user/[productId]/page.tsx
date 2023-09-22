@@ -1,55 +1,40 @@
-'use client';
-
 import { validateToken, WhopAPI } from "@whop-apps/sdk";
 import { headers } from "next/headers";
 import OpenButton from "@/components/OpenButton";
-import fetch from 'isomorphic-unfetch';
-import parser from 'fast-xml-parser';
 
-const UserPage = ({ params }: { params: { productId: string } }) => {
-  const [user, setUser] = React.useState(null);
-  const [urls, setUrls] = React.useState([]);
+export default async function UserPage({
+  params,
+}: {
+  params: { productId: string };
+}) {
+  try {
+    await validateToken({ headers }); // This will ensure only authenticated users can access this page
 
-  React.useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await validateToken({ headers });  // Ensure only authenticated users can access this page
+    const user = await WhopAPI.user({ headers }).GET("/me", {}); // This will fetch the user's information
 
-        // Fetch user info
-        const userResponse = await WhopAPI.user({ headers }).GET("/me", {});
-        setUser(userResponse.data);
-
-        // Fetch and parse RSS feed
-        const rssResponse = await fetch('https://whop.com/feed/');
-        const rssText = await rssResponse.text();
-        const rssJson = parser.parse(rssText);
-        const extractedUrls = rssJson.rss.channel.item.map(item => item.link);
-        const updatedUrls = extractedUrls.map(url => `${url}?a=${userResponse.data?.username}`);
-        setUrls(updatedUrls);
-
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  return (
-    <div className="pt-5 space-y-2">
-      {user && (
-        <>
-          <p>Username: {user.username}</p>
-          <p>Email: {user.email}</p>
-        </>
-      )}
-      <p>Product ID: {params.productId}</p>
-      <OpenButton />
-      {urls && urls.map((url, index) => (
-        <p key={index}>{url}</p>
-      ))}
-    </div>
-  );
+    return (
+      <div className="pt-5 space-y-2">
+        <p>Username: {user.data?.username}</p>
+        <p>Email: {user.data?.email}</p>
+        <p>Product ID: {params.productId}</p>
+        <OpenButton />
+      </div>
+    );
+  } catch (error) {
+    return (
+      <div className="h-screen flex flex-col items-center justify-center">
+        <p>
+          If you are the developer, make sure you are developing in the iFrame.
+          For more details, head {""}
+          <a
+            className="underline text-blue-500"
+            href="https://apps.whop.com/apps/environment"
+            target="_blank"
+          >
+            here
+          </a>
+        </p>
+      </div>
+    );
+  }
 }
-
-export default UserPage;
