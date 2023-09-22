@@ -16,8 +16,8 @@ export default async function UserPage({
     return (
       <>
         <main>
-          <div className="p-1.5 space-y-4">
-            <div className="bg-gray-100 p-4 rounded-lg">
+          <div className="p-2.5 space-y-4">
+            <div className="p-1.5 bg-gray-100 p-4 rounded-lg">
               <h2 className="text-xl font-bold mb-2">Content</h2>
               <ul className="space-y-2">
                 <li><a href="https://docs.google.com/spreadsheets/d/12I4lEgrCwYnBEv4pf8O1FskS6tpRM-D3FFzo9ajG6gI/edit#gid=1753519888" className="text-blue-500 underline">Content Calendar</a></li>
@@ -31,11 +31,6 @@ export default async function UserPage({
                 <li><a href="https://docs.google.com/spreadsheets/d/1ZNiO5Ms2eOEJU2HEafCc0G9NclpDVIwuDHn274AG7Rg/edit#gid=0" className="text-blue-500 underline">JV</a></li>
                 <li><a href="https://docs.google.com/spreadsheets/d/15VmRqv9IryxIMipIqSrIEaQy9yL_7aBUUJnV9it-Jrs/edit#gid=0" className="text-blue-500 underline">Roonie</a></li>
               </ul>
-            </div>
-            <div className="pt-5 space-y-2">
-              <p>Username: {user.data?.username}</p>
-              <p>Email: {user.data?.email}</p>
-              <OpenButton />
             </div>
           </div>
         </main>
