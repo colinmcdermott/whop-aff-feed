@@ -13,7 +13,7 @@ export default async function UserPage({
     const user = await WhopAPI.user({ headers }).GET("/me", {}); // This will fetch the user's information
 
     return (
-      <div className="space-y-4">
+      <div className="p-1.5 space-y-4">
         <div className="bg-gray-100 p-4 rounded-lg">
           <h2 className="text-xl font-bold mb-2">Content</h2>
           <ul className="space-y-2">
