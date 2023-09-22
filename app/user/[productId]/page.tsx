@@ -46,5 +46,4 @@ export default function UserPage({ params }: { params: { productId: string } }) 
   );
 }
 
-// Export the UserPage component as the default export
-export default UserPage;
+export const client = true;  // This line tells Next.js to treat UserPage as a client component
