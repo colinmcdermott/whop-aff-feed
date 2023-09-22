@@ -21,7 +21,6 @@ export default async function UserPage({
           </ul>
           <h3 className="text-xl font-bold mb-2">Article Planners</h2>
           <ul className="space-y-2">
-            <li><a href="https://docs.google.com/spreadsheets/d/12I4lEgrCwYnBEv4pf8O1FskS6tpRM-D3FFzo9ajG6gI/edit#gid=1753519888" className="text-blue-500 underline">Content Calendar</a></li>
             <li><a href="https://docs.google.com/spreadsheets/d/1dx27E6QZ1oSLeTMa9NaoMd8h1dNcuTn1vVUR4CN9G9c/edit#gid=0" className="text-blue-500 underline">Druvi</a></li>
             <li><a href="https://docs.google.com/spreadsheets/d/19IkP-1DPl4-dxR_sNhlmCJH8vKp4AE7DmqbTl04uic4/edit#gid=0" className="text-blue-500 underline">Kean</a></li>
             <li><a href="https://docs.google.com/spreadsheets/d/17bHrJgDbK5SP_KhSZ-x0KWPWgvUp3S1bwhgd32gYeKs/edit#gid=0" className="text-blue-500 underline">Alexios</a></li>
