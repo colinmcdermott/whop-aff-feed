@@ -1,49 +1,55 @@
-// Import necessary packages and components
-import { useState, useEffect } from 'react';
+'use client';
+
 import { validateToken, WhopAPI } from "@whop-apps/sdk";
 import { headers } from "next/headers";
 import OpenButton from "@/components/OpenButton";
-import { fetchAndParseRSS } from '../utils/rssFeed';
+import fetch from 'isomorphic-unfetch';
+import parser from 'fast-xml-parser';
 
-// Define the UserPage component
-export default function UserPage({ params }: { params: { productId: string } }) {
-  // Define a state variable to hold the RSS URLs
-  const [rssUrls, setRssUrls] = useState<string[]>([]);
+const UserPage = ({ params }: { params: { productId: string } }) => {
+  const [user, setUser] = React.useState(null);
+  const [urls, setUrls] = React.useState([]);
 
-  // Define an async function to handle fetching the RSS feed
-  async function handleFetchRSS() {
-    try {
-      // Validate the user token and fetch the user's information
-      await validateToken({ headers });
-      const user = await WhopAPI.user({ headers }).GET("/me", {});
+  React.useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await validateToken({ headers });  // Ensure only authenticated users can access this page
 
-      // Fetch and parse the RSS feed, then update the state variable with the modified URLs
-      const affiliateUrls = await fetchAndParseRSS(user.data?.username);
-      setRssUrls(affiliateUrls);
-    } catch (error) {
-      // Log any errors to the console
-      console.error(error);
-    }
-  }
+        // Fetch user info
+        const userResponse = await WhopAPI.user({ headers }).GET("/me", {});
+        setUser(userResponse.data);
 
-  // Render the component
+        // Fetch and parse RSS feed
+        const rssResponse = await fetch('https://whop.com/feed/');
+        const rssText = await rssResponse.text();
+        const rssJson = parser.parse(rssText);
+        const extractedUrls = rssJson.rss.channel.item.map(item => item.link);
+        const updatedUrls = extractedUrls.map(url => `${url}?a=${userResponse.data?.username}`);
+        setUrls(updatedUrls);
+
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="pt-5 space-y-2">
+      {user && (
+        <>
+          <p>Username: {user.username}</p>
+          <p>Email: {user.email}</p>
+        </>
+      )}
       <p>Product ID: {params.productId}</p>
       <OpenButton />
-      <button onClick={handleFetchRSS}>Fetch RSS</button>
-      {rssUrls.length > 0 && (
-        <div>
-          <h3>Affiliate URLs:</h3>
-          <ul>
-            {rssUrls.map((url, index) => (
-              <li key={index}>{url}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+      {urls && urls.map((url, index) => (
+        <p key={index}>{url}</p>
+      ))}
     </div>
   );
 }
 
-export const client = true;  // This line tells Next.js to treat UserPage as a client component
+export default UserPage;
