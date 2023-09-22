@@ -17,11 +17,13 @@ export default async function UserPage({
       <>
         <main>
           <div className="p-2.5 space-y-4">
-            <div className="p-1.5 bg-gray-100 p-4 rounded-lg">
+            <div className="bg-gray-100 p-4 rounded-lg">
               <h2 className="text-xl font-bold mb-2">Content</h2>
               <ul className="space-y-2">
                 <li><a href="https://docs.google.com/spreadsheets/d/12I4lEgrCwYnBEv4pf8O1FskS6tpRM-D3FFzo9ajG6gI/edit#gid=1753519888" className="text-blue-500 underline">Content Calendar</a></li>
               </ul>
+            </div>
+            <div className="p-1.5 pt-5 space-y-2">
               <h3 className="text-xl font-bold mb-2">Article Planners</h3>
               <ul className="space-y-2">
                 <li><a href="https://docs.google.com/spreadsheets/d/1dx27E6QZ1oSLeTMa9NaoMd8h1dNcuTn1vVUR4CN9G9c/edit#gid=0" className="text-blue-500 underline">Druvi</a></li>
