@@ -1,65 +1,56 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { fetchData } from '../utils/api';
 
 const tasks = [
-  // ... your tasks
+  // ... your tasks data
 ];
 
-const Home = ({ userData, initialMerchants }) => {
-  const [merchants, setMerchants] = useState(initialMerchants);
+export default function Home() {
+  const [userProfile, setUserProfile] = useState(null);
 
   useEffect(() => {
-    // Additional client-side fetching if necessary
+    async function fetchUserProfile() {
+      const profile = await fetchData();
+      setUserProfile(profile);
+    }
+    fetchUserProfile();
   }, []);
-
-  if (!userData) return null;  // Or render a loading spinner
 
   return (
     <main className="flex min-h-screen flex-col items-center p-24">
       {/* ... rest of your code */}
-      <div className="affiliate-feed">
-        <h3 className="text-2xl font-bold mb-4">Affiliate Feed:</h3>
-        {merchants.map(merchant => (
-          <div key={merchant.id}>
-            <a href={`https://whop.com/${merchant.name}?a=${userData.username}`}>
-              {merchant.name}
-            </a>
-          </div>
-        ))}
-      </div>
+
+      {userProfile && (
+        <div>
+          <h3>User Profile:</h3>
+          <p>Email: {userProfile.email}</p>
+          <p>Username: {userProfile.username}</p>
+          <img src={userProfile.profile_pic_url} alt="Profile Picture" />
+        </div>
+      )}
     </main>
   );
-};
+}
 
-export async function getServerSideProps() {
+// utils/api.js
+export async function fetchData() {
   const options = {
     method: 'GET',
-    headers: { Authorization: process.env.WHOP_API_KEY },
+    headers: {
+      Authorization: process.env.WHOP_API_KEY,
+    },
   };
 
   try {
-    const userRes = await fetch('https://api.whop.com/me', options);
-    if (!userRes.ok) throw new Error(`Network response was not ok ${userRes.statusText}`);
-    const userData = await userRes.json();
-
-    const merchantRes = await fetch('https://whop.com/feed/');
-    if (!merchantRes.ok) throw new Error(`Network response was not ok ${merchantRes.statusText}`);
-    const merchantData = await merchantRes.json();
-
-    return {
-      props: {
-        userData,
-        initialMerchants: merchantData,  // Assuming merchantData is an array of merchant objects
-      },
-    };
-
+    const response = await fetch('https://api.whop.com/me', options);
+    if (!response.ok) {
+      throw new Error(`Network response was not ok ${response.statusText}`);
+    }
+    const data = await response.json();
+    return data;
   } catch (error) {
-    console.error(error);
-    return {
-      notFound: true,  // This will render a 404 page
-    };
+    console.error('There has been a problem with your fetch operation:', error);
   }
 }
-
-export default Home;
