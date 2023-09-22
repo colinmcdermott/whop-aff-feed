@@ -14,8 +14,6 @@ export default async function UserPage({
 
     return (
       <div className="pt-5 space-y-2">
-        <h2>Content Team</h2>
-        <p><a href="https://docs.google.com/spreadsheets/d/12I4lEgrCwYnBEv4pf8O1FskS6tpRM-D3FFzo9ajG6gI/edit#gid=1753519888" target="_blank">Content Calendar</a></p>
         <p>Username: {user.data?.username}</p>
         <p>Email: {user.data?.email}</p>
         <OpenButton />
