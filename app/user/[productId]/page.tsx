@@ -1,6 +1,7 @@
 import { validateToken, WhopAPI } from "@whop-apps/sdk";
 import { headers } from "next/headers";
 import OpenButton from "@/components/OpenButton";
+import React from 'react';
 
 export default async function UserPage({
   params,
