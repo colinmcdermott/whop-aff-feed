@@ -17,7 +17,7 @@ export default async function UserPage({
         <div className="pt-5 space-y-2">
           <h2>Content</h2>
           <ul>
-            <li>Content Planner</li>
+            <li><a href="https://docs.google.com/spreadsheets/d/12I4lEgrCwYnBEv4pf8O1FskS6tpRM-D3FFzo9ajG6gI/edit#gid=1753519888" target="_blank">Content Planner</a></li>
           </ul>>
         </div>
 
