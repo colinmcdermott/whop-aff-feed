@@ -1,28 +1,32 @@
-import { useState } from 'react';
+// Import necessary packages and components
+import { useState, useEffect } from 'react';
 import { validateToken, WhopAPI } from "@whop-apps/sdk";
 import { headers } from "next/headers";
 import OpenButton from "@/components/OpenButton";
 import { fetchAndParseRSS } from '../utils/rssFeed';
 
-export default async function UserPage({
-  params,
-}: {
-  params: { productId: string };
-}) {
+// Define the UserPage component
+export default function UserPage({ params }: { params: { productId: string } }) {
+  // Define a state variable to hold the RSS URLs
   const [rssUrls, setRssUrls] = useState<string[]>([]);
-  
+
+  // Define an async function to handle fetching the RSS feed
   async function handleFetchRSS() {
     try {
-      await validateToken({ headers });  // Ensure only authenticated users can access this page
-      const user = await WhopAPI.user({ headers }).GET("/me", {});  // Fetch the user's information
+      // Validate the user token and fetch the user's information
+      await validateToken({ headers });
+      const user = await WhopAPI.user({ headers }).GET("/me", {});
+
+      // Fetch and parse the RSS feed, then update the state variable with the modified URLs
       const affiliateUrls = await fetchAndParseRSS(user.data?.username);
       setRssUrls(affiliateUrls);
     } catch (error) {
+      // Log any errors to the console
       console.error(error);
-      // Handle error
     }
   }
 
+  // Render the component
   return (
     <div className="pt-5 space-y-2">
       <p>Product ID: {params.productId}</p>
@@ -41,3 +45,6 @@ export default async function UserPage({
     </div>
   );
 }
+
+// Export the UserPage component as the default export
+export default UserPage;
